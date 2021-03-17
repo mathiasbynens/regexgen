@@ -1,5 +1,17 @@
 const Map = require('./map');
 
+const print = (state, prefix = '') => {
+  if (state.accepting) {
+    console.log(`${prefix}`);
+  }
+  if (state.transitions.size === 0) {
+    return;
+  }
+  for (const [ch, otherState] of state.transitions) {
+    print(otherState, prefix ? `${prefix} => ${ch}` : `${ch}`);
+  }
+};
+
 /**
  * Represents a state in a DFA.
  */
@@ -21,6 +33,10 @@ class State {
     for (let state of this.transitions.values()) {
       yield* state.visit(visited);
     }
+  }
+
+  toString() {
+    print(this);
   }
 }
 

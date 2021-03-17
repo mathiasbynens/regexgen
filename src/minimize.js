@@ -10,11 +10,11 @@ const State = require('./state');
  * @return {State} - the new initial state
  */
 function minimize(root) {
-  // TODO: Re-enable minimizing once the upstream bugs are fixed:
-  // https://github.com/devongovett/regexgen/issues/31
-  return root;
-
   let states = new Set(root.visit());
+
+  // Ugly hack to print debug output as a side effect.
+  [...states][0].toString();
+
   let finalStates = states.filter(s => s.accepting);
 
   // Create a map of incoming transitions to each state, grouped by character.
@@ -74,6 +74,7 @@ function minimize(root) {
     let first = S.first();
     let s = newStates.get(S);
     for (let [c, old] of first.transitions) {
+      //console.log(c, require('util').inspect(old, { depth: Infinity }));
       s.transitions.set(c, newStates.get(P.find(v => v.has(old))));
     }
 
